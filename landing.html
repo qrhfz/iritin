@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css"> 
+</head>
+
+<body>
+  <div class="container-fluid p-5" style="height: 100vh;">
+    <div class="row justify-content-center mt-5 pt-5">
+      <h1>
+        irit.in
+      </h1>
+    </div>
+    <div class="row justify-content-center">
+
+      <div class="col-md-8 col-sm-12">
+        <div class="input-group mb-3">
+          <input id="inp_longurl" type="text" class="form-control"
+            placeholder="https://a.really-long.url/that-needs-to-be-shiorten" aria-label="Long url"
+            aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" id="btn_submit" type="button">Shorten</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="#row_result" class="row justify-content-center">
+      <a id="link_result" href="http://lorem-ipsum.com">https://irit.in/66666666</a>
+      <button id="btn_copy" type="button" class="ml-1 btn btn-primary btn-sm">
+        <i class="zmdi zmdi-copy"></i>
+      </button>
+
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $('document').ready(function (params) {
+    $('#row_result').hide()
+    
+  })
+
+  $("#btn_submit").click(function () {
+    var long_link = $("#inp_longurl").val()
+    $.post("/link",{long_link:long_link}, function (data) {
+      $("#inp_longurl").val('')
+      $('#row_result').show()
+      if(typeof data.id != "undefined"){
+        $("#link_result").attr("href", "https://irit.in/"+data.id)
+        $("#link_result").text("irit.in/"+data.id)
+      }else if(data.error){
+        alert(data.error)
+      }
+    });
+  });
+  $("#btn_copy").click(function () {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($('#link_result').attr('href').trim()).select();
+    document.execCommand("copy");
+    $temp.remove();
+  });
+</script>
+</body>
+
+
+</html>
